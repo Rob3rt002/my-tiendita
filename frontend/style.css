@@ -1,0 +1,215 @@
+*{
+    background-color: #64dfdf;
+}
+
+body {
+    width: 450px;
+    margin: 50px auto;
+    background-color: #6fffe9;
+    padding: 0 20px 20px 20px;
+    border: 1px solid black;
+    border-radius: 2%;
+}
+
+h1{
+    width: 40%;
+    background-color: #6fffe9;
+    margin: 0 auto;
+}
+h2{
+    width: 80%;
+    background-color: #6fffe9;
+    margin: 0 auto;
+}
+
+section, li, form, label{
+    width: 100%;
+    background-color: #6fffe9;
+    margin: 0 auto;
+    padding-top: 10px;
+    list-style: none;
+}
+li{
+    width: 80%;
+    font-size: 20px;
+    margin: 0 10px 0 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+img{
+    width: 50%;
+    display: flex;
+    justify-content: end;
+    background-color: #6fffe9;
+    padding-left: 15px;
+    cursor: pointer;
+}
+
+input{
+    background-color: #d0d3de;
+    margin: 5px auto;
+}
+
+button.second{
+    width: 60%;
+    height: 40px;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid;
+    border-radius: 5px;
+    cursor: pointer;
+}
+button.tercero{
+    width: 20%;
+    height: 20px;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button{
+    width: 100%;
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+a{
+    text-decoration: none;
+    background: transparent;
+}
+a.second{
+    width: 10px;
+    text-decoration: none;
+    background: transparent;
+}
+
+svg{
+    height: 15px;
+    margin: 15px 50px;
+    background: transparent;
+}
+svg.principal{
+    height: 25px;
+    margin: 15px 10px;
+    background: transparent;
+}
+
+div{
+    width: 80%;
+    height: auto;
+    margin: 0 auto;
+    background: transparent;
+    display: flex;
+}
+div.factura{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+div.header{
+    width: 80px;
+    height: 20%;
+    background: transparent;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+div.icono{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-left: 45px;
+    margin-top: 20px;
+}
+div.producto{
+    height: 30px;
+    display: flex;
+    align-items: center;
+}
+div.product{
+    display: flex;
+    align-items: center;
+}
+div.recibo{
+    width: 80%;
+    display: flex;
+}
+
+input.view{
+    width: 100%;
+    background-color: transparent;
+    margin: 5px auto;
+    border: none;
+    border-style: none;
+}
+
+header{
+    display: flex;
+    align-items: center;
+    background: transparent;
+}
+span{
+    width: 100%;
+    background-color: transparent;
+}
+
+#listaProductos{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#listaFacturas{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#output{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+#factura-detalle{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+#factura-total{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.recibo{
+    justify-content: space-between;
+    align-items: center;
+}
+.elementos{
+    width: 100%;
+    flex-direction: column;
+    margin-top: 20px;
+}

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="../style.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body>
+    <header>
+        <a class="second" href="../index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></a>
+        <h1>View Clientes</h1>
+    </header>
+        
+    <form id="registroForm" action="" method="PUT">
+        <div>
+            <label for="nombre">Nombre:</label>
+            <input class="view" type="text" id="nombre" name="nombre" required readonly><br><br>
+        </div>
+        
+        <div>
+            <label for="email">Apellido:</label>
+            <input class="view" type="text" id="apellido" name="apellido" required readonly><br><br>
+        </div>
+        
+        <div>
+            <label for="contrasena">Genero:</label>
+            <input class="view" type="text" id="genero" name="genero" required readonly><br><br>
+        </div>
+        
+        <div>
+            <label for="contrasena">Direccion:</label>
+            <input class="view" type="text" id="direccion" name="direccion" required readonly><br><br>
+        </div>
+        
+        <div>
+            <label for="contrasena">Email:</label>
+            <input class="view" type="text" id="email" name="email" required readonly><br><br>
+        </div>
+        
+        <div>
+            <label for="contrasena">Edad:</label>
+            <input class="view" type="text" id="edad" name="edad" required readonly><br><br>
+        </div>
+        
+    </form>
+
+    <div class="factura" >
+        <h2>Facturas del Cliente</h2>
+        <div id="listaFacturas"></div>
+    </div>
+    <script src="../lib/view_cliente.js"></script>
+</body>
+
+</html>

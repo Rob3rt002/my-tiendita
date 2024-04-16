@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="../style.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body>
+    <header>
+        <a class="second" href="#" onclick="goBack()"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></a>
+        <h1>View Clientes</h1>
+    </header>
+    <div class="factura" id="factura-detalles">
+        <h2>detalle de la factura</h2>
+        <div id="factura-detalle"></div>
+    </div>
+    <script>
+        let factura_id;
+        document.addEventListener('DOMContentLoaded', function () {
+            // Obtener el ID del cliente de la URL
+            const params = new URLSearchParams(window.location.search);
+            factura_id = params.get('id');
+
+            console.log(factura_id);
+
+            // Obtener los datos de la factura desde el servidor
+            function obtenerFactura(factura_id) {
+                fetch(`http://127.0.0.1:8000/factura/${factura_id}/detalle`)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data.data);
+                        renderizarDetalles(data.data);
+                    })
+                    .catch(error => console.error('Error al obtener las facturas del cliente:', error));
+            }
+
+            // Función para renderizar los detalles de la factura en el HTML
+            function renderizarDetalles(data) {
+                const detalleContainer = document.getElementById('factura-detalle');
+                detalleContainer.innerHTML = ''; // Limpiar el contenido anterior
+
+                // Iterar sobre cada objeto en el array de datos
+                data.forEach(detalle => {
+                    // Verificar si el objeto tiene la propiedad 'producto_nombre'
+                    if (detalle.hasOwnProperty('producto_nombre',' producto_precio', 'cantidad')) {
+                        const productoNombre = detalle.producto_nombre;
+                        const productoPrecio = detalle.producto_precio;
+                        const productoCantidad = detalle.cantidad;
+                        const productoDescription = detalle.producto_descripción;
+                        const elementFactura = document.createElement('div');
+                        elementFactura.setAttribute("class", "elementos")
+                        const detalleElement = document.createElement('div');
+                        detalleElement.textContent = `${productoNombre}  Cantidad: ${productoCantidad}`;
+                        const detallePrecio = document.createElement('div');
+                        detallePrecio.textContent = `Precio Unitario: ${productoPrecio}$`;
+                        const detalleDescription = document.createElement('div');
+                        detalleDescription.textContent = `Descripcion: ${productoDescription}`;
+
+                        elementFactura.appendChild(detalleElement);
+                        elementFactura.appendChild(detallePrecio);
+                        elementFactura.appendChild(detalleDescription);
+
+                        detalleContainer.appendChild(elementFactura);
+                    } else {
+                        console.error('No se encontró el nombre del producto en los datos:', detalle);
+                    }
+                });
+                
+            }
+
+
+            obtenerFactura(factura_id);
+        });
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+</html>

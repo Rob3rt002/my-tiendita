@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing System</title>
+    <style>
+        #output {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <input type="text" id="product-input" placeholder="Enter product name...">
+    <input type="number" id="price-input" placeholder="Enter product price...">
+    <button onclick="addProduct()">Add Product</button>
+    <button onclick="resetForm()">Reset</button>
+    <div id="output"></div>
+
+    <script>
+        const output = document.getElementById("output");
+        let products = [];
+        let total = 0;
+
+        function addProduct() {
+            const productName = document.getElementById("product-input").value;
+            const productPrice = parseFloat(document.getElementById("price-input").value);
+
+            if (productName && productPrice) {
+                products.push({ name: productName, price: productPrice });
+                output.innerHTML = createList();
+                resetForm();
+            }
+        }
+
+        function createList() {
+            let list = "";
+            total = 0;
+            products.forEach((product, i) => {
+                list += `<p>${product.name}: $${product.price.toFixed(2)}</p>`;
+                total += product.price;
+            });
+            list += `<p>Total: $${total.toFixed(2)}</p>`;
+            return list;
+        }
+
+        function resetForm() {
+            document.getElementById("product-input").value = "";
+            document.getElementById("price-input").value = "";
+        }
+    </script>
+</body>
+</html>

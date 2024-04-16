@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="../style.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body>
+    <header>
+        <a class="second" href="../index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></a>
+        <h1>View compra</h1>
+    </header>
+        
+    <form id="registroForm" action="" method="PUT">
+        <div>
+            <label for="nombre">Nombre:</label>
+            <input class="view" type="text" id="nombre" name="nombre" required readonly><br><br>
+        </div>
+        
+        <div>
+            <label for="email">Apellido:</label>
+            <input class="view" type="text" id="apellido" name="apellido" required readonly><br><br>
+        </div>
+        <div>
+            <label for="contrasena">Email:</label>
+            <input class="view" type="text" id="email" name="email" required readonly><br><br>
+        </div>
+        
+        <div>
+            <label for="contrasena">Edad:</label>
+            <input class="view" type="text" id="edad" name="edad" required readonly><br><br>
+        </div>
+        
+    </form>
+    <div class="factura" >
+        <select name="sucursal" id="sucursal">
+            <option value="Norte">Norte</option>
+            <option value="Centro">Centro</option>
+            <option value="Sur">Sur</option>
+          </select>
+        <h2>Productos</h2>
+        <span id="listaProductos"></span>
+    </div>
+
+    <form id="factura" action="" method="POST" >
+        <h2>Total</h2>
+    <div id="output"></div>
+        <div id="output"></div>
+        <button class="second" type="submit">Enviar</button>
+
+    </form>
+    <script>
+        let cliente_id;
+        document.addEventListener('DOMContentLoaded', function () {
+            // Obtener el ID del cliente de la URL
+            const params = new URLSearchParams(window.location.search);
+            cliente_id = params.get('id');
+
+            // Función para obtener los detalles del cliente
+            function obtenerDetallesCliente(cliente_id) {
+                fetch(`http://127.0.0.1:8000/clientes/${cliente_id}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const cliente = data.data[0];
+                            document.getElementById('nombre').value = cliente.cliente_nombre;
+                            document.getElementById('apellido').value = cliente.cliente_apellido;
+                            document.getElementById('email').value = cliente.cliente_email;
+                            document.getElementById('edad').value = cliente.cliente_edad;
+                    })
+                    .catch(error => console.error('Error al obtener los detalles del cliente:', error));
+            }
+            
+            // Función para obtener los productos
+            function obtenerProducto(producto_id) {
+                fetch(`http://127.0.0.1:8000/productos`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const output = document.getElementById("output");
+                        
+                        
+                        const producto = data.data;
+                        const listaFacturas = document.getElementById('listaFacturas');
+                        producto.forEach(producto => {
+                            const b = document.createElement('button');
+                            b.setAttribute('class', 'tercero');
+                            b.textContent = "+";
+                            b.addEventListener("click", function() {
+                                addProduct(producto.producto_id, producto.producto_nombre, producto.producto_precio);
+                            });
+
+                            const itemNombre = document.createElement('input');
+                            itemNombre.setAttribute('class', 'view');
+                            itemNombre.value = `${producto.producto_nombre}`;
+
+
+
+                            const itemPrecio = document.createElement('input');
+                            itemPrecio.setAttribute('class', 'view');
+                            itemPrecio.value = `${producto.producto_precio}`;
+
+
+                            const icon = document.createElement('div');
+                            icon.setAttribute('class', 'producto');
+                            icon.setAttribute('id', 'elemento');
+
+                            itemNombre.textContent = `  ${producto.producto_nombre}`;
+                            itemPrecio.textContent = `  ${producto.producto_precio} $`;
+
+                            const icon3 = document.createElement('img');
+                            icon3.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>');
+                            icon3.width = 18;
+                            icon3.height = 18;
+
+                            
+                            icon.appendChild(itemNombre);
+                            icon.appendChild(itemPrecio);
+                            icon.appendChild(b);
+
+
+                            listaProductos.appendChild(icon);
+                        });
+                    })
+                    .catch(error => console.error('Error al obtener las facturas del cliente:', error));
+            }
+            
+
+            // Llamar a la función para obtener los detalles del cliente al cargar la página
+            obtenerProducto(cliente_id);
+            obtenerDetallesCliente(cliente_id);
+        });
+
+        
+
+        const output = document.getElementById("output");
+        let products = [];
+        let productCount= 0;
+
+        function addProduct(producto_id, productName, productPrice) {
+            const existingProductIndex = products.findIndex(product => product.id === producto_id);
+
+            if (productName && productPrice) {
+                if (existingProductIndex !== -1) {
+                    // Si el producto ya existe, actualiza su precio y cantidad
+                    products[existingProductIndex].price += productPrice;
+                    products[existingProductIndex].quantity += 1; // Incrementa la cantidad
+                } else {
+                    // Si el producto no existe, agregamos uno nuevo
+                    products.push({ id: producto_id, name: productName, price: productPrice, quantity: 1 }); // Inicializa la cantidad en 1
+                }
+                productCount++; // Incrementa el recuento total de productos
+                output.innerHTML = createList(); // Actualiza la lista en el HTML
+            }
+
+            console.log("me estoy ejecutando");
+        }
+
+        function createList() {
+            let list = "";
+            total = 0;
+
+            products.forEach((product, i) => {
+                list += `<div class="product">`;
+                list += `<input class="view name" id="name" value="${product.name}" readonly>`;
+                list += `<input class="view" id="preci" value="${parseFloat(product.price).toFixed(2) * product.quantity }" readonly>`;
+                list += `<input class="view cantidad" id="cantidad" value="${product.quantity}" readonly>`; // Agrega la cantidad al HTML
+                list += `</div>`;
+                total += parseFloat(product.price) * product.quantity; // Calcula el precio total del producto (precio * cantidad)
+            });
+
+            list += `<div>Total:<input id= "total" class="view" value="${total.toFixed(2)}"></div>`;
+            
+            
+            return list;
+        }
+
+        function resetForm() {
+            document.getElementById("product-input").value = "";
+            document.getElementById("price-input").value = "";
+        }
+
+        // Manejar el envío del formulario
+        document.getElementById('factura').addEventListener('submit', function(event) {
+            event.preventDefault(); // Evitar que el formulario se envíe de forma tradicional
+
+            // Obtener los valores de los campos del formulario
+            const sucursal = document.getElementById('sucursal').value;
+            const total = document.getElementById('total').value;
+
+            // Obtener todos los productos
+            const productos = document.querySelectorAll('.product');
+
+            // Construir un array con los productos
+            const productosArray = products.map(product => {
+                return {
+                    producto_id: product.id,
+                    cantidad: product.quantity
+                };
+            });
+
+            // Construir el objeto de datos del cliente actualizado
+            const datos = {
+                factura_fecha: obtenerFechaActual(), // Obtener fecha actual
+                factura_sucursal: sucursal,
+                factura_total: parseFloat(total),
+                cliente_id: cliente_id,
+                producto: productosArray
+            };
+            console.log(`me estoy ejecutando, ${productosArray}, ${sucursal}, ${total}, ${cliente_id} `);
+
+            // Enviar datos al servidor mediante fetch()
+            fetch("http://127.0.0.1:8000/factura", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(datos)
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.text();
+                }
+                throw new Error("Error en la respuesta del servidor");
+            })
+            .then(data => {
+                // Manejar respuesta del servidor
+                console.log(datos);
+                // alert("Registro exitoso");
+                // Puedes redirigir al usuario a otra página si lo deseas
+                window.location.href = "../index.html";
+            })
+            .catch(error => {
+                console.error("Error al procesar la solicitud:", error);
+                if (error.name === "TypeError") {
+                    console.error("Error details:", error.message);
+                }
+                alert("Hubo un problema al procesar tu solicitud.");
+            });
+            
+        });
+        // Función para obtener la fecha actual en el formato requerido
+        function obtenerFechaActual() {
+            const fechaActual = new Date();
+            const year = fechaActual.getFullYear();
+            const month = String(fechaActual.getMonth() + 1).padStart(2, '0'); // Los meses son indexados desde 0, por eso se suma 1
+            const day = String(fechaActual.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        
+
+    </script>
+</body>
+
+</html>

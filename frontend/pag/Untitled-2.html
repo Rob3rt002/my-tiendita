@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="../style.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body>
+    <header>
+        <a class="second" href="../index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></a>
+        <h1>View compra</h1>
+    </header>
+        
+    <form id="registroForm" action="" method="PUT">
+        <div>
+            <label for="nombre">Nombre:</label>
+            <input class="view" type="text" id="nombre" name="nombre" required readonly><br><br>
+        </div>
+        
+        <div>
+            <label for="email">Apellido:</label>
+            <input class="view" type="text" id="apellido" name="apellido" required readonly><br><br>
+        </div>
+        <div>
+            <label for="contrasena">Email:</label>
+            <input class="view" type="text" id="email" name="email" required readonly><br><br>
+        </div>
+        
+        <div>
+            <label for="contrasena">Edad:</label>
+            <input class="view" type="text" id="edad" name="edad" required readonly><br><br>
+        </div>
+        
+    </form>
+    <div class="factura" >
+        <h2>Productos</h2>
+        <span id="listaProductos"></span>
+    </div>
+
+    <div class="factura" >
+        <h2>Total</h2>
+        <div id="output"></div>
+    </div>
+    <script>
+        const output = document.getElementById("output");
+
+        let cliente_id;
+        document.addEventListener('DOMContentLoaded', function () {
+            // Obtener el ID del cliente de la URL
+            const params = new URLSearchParams(window.location.search);
+            cliente_id = params.get('id');
+
+            // Función para obtener los detalles del cliente
+            function obtenerDetallesCliente(cliente_id) {
+                fetch(`http://127.0.0.1:8000/factura/${cliente_id}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const cliente = data.data[0];
+                            document.getElementById('nombre').value = cliente.cliente_nombre;
+                            document.getElementById('apellido').value = cliente.cliente_apellido;
+                            document.getElementById('email').value = cliente.cliente_email;
+                            document.getElementById('edad').value = cliente.cliente_edad;
+                    })
+                    .catch(error => console.error('Error al obtener los detalles del cliente:', error));
+            }
+            
+            // Función para obtener los productos
+            function obtenerProducto(producto_id) {
+                fetch(`http://127.0.0.1:8000/productos`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const output = document.getElementById("output");
+                        
+                        
+                        const producto = data.data;
+                        const listaFacturas = document.getElementById('listaFacturas');
+                        producto.forEach(producto => {
+
+                            const itemNombre = document.createElement('div');
+                            itemNombre.setAttribute('id', 'nombre');
+                            const itemPrecio = document.createElement('div');
+                            itemPrecio.setAttribute('id', 'precio');
+                            const icon = document.createElement('div');
+                            itemNombre.textContent = `  ${producto.producto_nombre}`;
+                            itemPrecio.textContent = `  ${producto.producto_precio} $`;
+
+                            const icon3 = document.createElement('img');
+                            icon3.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>');
+                            icon3.width = 18;
+                            icon3.height = 18;
+                            icon3.addEventListener('click', function() {
+                                
+                                const productName = document.getElementById("nombre").value;
+                                const productPrice = parseFloat(document.getElementById("precio").value);
+
+                                if (productName && productPrice) {
+                                    products.push({ name: productName, price: productPrice });
+                                    output.innerHTML = createList();
+                                    resetForm();
+                                }
+                             });
+                            icon.appendChild(itemNombre);
+                            icon.appendChild(itemPrecio);
+                            icon.appendChild(icon3);
+
+
+                            listaProductos.appendChild(icon);
+                        });
+                    })
+                    .catch(error => console.error('Error al obtener las facturas del cliente:', error));
+            }
+            let products = [];
+            let total = 0;
+
+            function createList() {
+            let list = "";
+            total = 0;
+            products.forEach((products, i) => {
+                list += `<p>${product.name}: $${product.price.toFixed(2)}</p>`;
+                total += product.price;
+            });
+            list += `<p>Total: $${total.toFixed(2)}</p>`;
+            return list;
+            }
+            
+
+            // Llamar a la función para obtener los detalles del cliente al cargar la página
+            obtenerProducto(cliente_id);
+            obtenerDetallesCliente(cliente_id);
+            createList(cliente_id);
+        });
+
+        // Manejar el envío del formulario
+        document.getElementById('registroForm').addEventListener('S', function(event) {
+            event.preventDefault(); // Evitar que el formulario se envíe de forma tradicional
+
+            // Obtener los valores de los campos del formulario
+            const nombre = document.getElementById('nombre').value;
+            const apellido = document.getElementById('apellido').value;
+            const genero = document.getElementById('genero').value;
+            const direccion = document.getElementById('direccion').value;
+            const email = document.getElementById('email').value;
+            const edad = document.getElementById('edad').value;
+
+            // Construir el objeto de datos del cliente actualizado
+            const datos = {
+                cliente_nombre: nombre,
+                cliente_apellido: apellido,
+                cliente_genero: genero,
+                cliente_direccion: direccion,
+                cliente_email: email,
+                cliente_edad: edad,
+            };
+
+            // Enviar los datos actualizados del cliente al servidor mediante fetch()
+            fetch(`http://127.0.0.1:8000/clientes/${cliente_id}`, {
+                method: 'PUT', // Usar el método PUT para actualizar los datos
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(datos)
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Cliente actualizado exitosamente
+                    alert('Los cambios se guardaron exitosamente.');
+                    // Redirigir a la página principal o a donde lo desees
+                    window.location.href = '../index.html';
+                } else {
+                    // Error al actualizar el cliente
+                    console.error('Error al actualizar el cliente:', response.status);
+                    alert('Hubo un error al guardar los cambios. Por favor, inténtalo de nuevo.');
+                }
+            })
+            .catch(error => {
+                console.error('Error al procesar la solicitud:', error);
+                alert('Hubo un problema al procesar tu solicitud. Por favor, inténtalo de nuevo.');
+            });
+        });
+    </script>
+</body>
+
+</html>
